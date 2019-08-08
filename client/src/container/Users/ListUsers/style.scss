@@ -1,0 +1,70 @@
+@import "assets/styles/colors.scss";
+
+.user-table{
+    display: block;
+    margin: 2em auto;
+    width: 90%;
+
+    h3{
+        color: $active;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .search{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .ehs{
+            width: 20%;
+            height: 2.5em;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            box-shadow:0px 3px 4px 0px rgba(191,198,201,1);
+            font-size: 0.75em;
+            background-color: $primary;
+        }
+        .ehs:hover{            
+            background-color: $hover;
+        }
+        .ehs:active{
+            background-color: $active;
+        }
+    }
+
+    .table{
+        margin: 2em 0;
+    }
+
+    th{
+        font-weight: medium;
+    }
+
+    td{
+        color: #777777;
+
+        .view-details-button{
+            background-color: $primary;
+            height: 2.5em;
+            border-style: none;
+            border-radius: 5px;
+            color: #fff;
+            width: 100%;
+            font-size: 0.75em;
+        }
+        .view-details-button:hover{
+            background-color: $hover;
+        }
+
+        .view-details-button:active{
+            background-color: $active;
+        }
+    }
+
+    .name{
+        color: $primary;
+    }
+
+}

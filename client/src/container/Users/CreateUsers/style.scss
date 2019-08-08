@@ -1,0 +1,49 @@
+@import "assets/styles/colors.scss";
+
+.create-users{
+    width: 90%;
+    padding: 1.25em;
+    height: 85vh;
+    justify-content: flex-start;
+
+    h3{
+        color: $primary;
+        font-weight: bold;
+        padding-left: 1em;
+    }
+}
+.create-user-form{
+    height: 90%;
+    .user-form{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    
+    .form-input{
+        width: 100%;
+        margin: 0.5em 0;
+        position: relative;
+
+        .validity{
+            position: absolute;
+            right: 0;
+        }
+    }
+
+    .submit-button{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+}
+
+label{
+    margin: 0;
+}
+
+p{
+    margin: 0;
+}

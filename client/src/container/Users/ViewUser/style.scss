@@ -1,0 +1,35 @@
+@import "assets/styles/colors.scss";
+
+.view-user{
+    width: 95%;
+    margin: 1em;
+    
+    .title{
+        width: 100%;
+        justify-content: space-between;   
+        flex-direction: row;  
+
+        .buttons{
+            flex-basis: 33.333%;
+            flex-direction: row;
+        }
+    }
+
+    .view-user-table{
+        margin-top: 2em;
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        width: 100%;
+        .table{
+            width: 75%;
+        }
+
+        img{
+            width: 15%;
+            height: auto; 
+        }
+    }
+    
+    
+}

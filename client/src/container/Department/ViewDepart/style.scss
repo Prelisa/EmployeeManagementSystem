@@ -1,0 +1,40 @@
+@import "assets/styles/colors.scss";
+
+.view-dept{
+    width: 95%;
+    margin: 2em auto;
+    
+    .title{
+        flex-direction: row;  
+        justify-content: space-between;
+        width: 100%;
+        
+        h3{
+            flex-basis: 10%;
+        }
+        .buttons{
+            flex-basis: 33.33%;
+            display: flex;
+            flex-direction: row;   
+            justify-content: space-between         
+        }
+    }
+
+    .view-dept-table{
+        margin-top: 2em;
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+
+        .table{
+            flex-basis: 60%;
+        }
+
+        img{
+            width: 40vh;
+            height: auto;
+        }
+    }
+
+    
+}
