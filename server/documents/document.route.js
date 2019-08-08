@@ -4,6 +4,9 @@ const multer = require("multer");
 const path = require("path");
 const mongoClient = require("mongodb").MongoClient;
 
+
+
+
 //Setting up our storage
 
 let storage = multer.diskStorage({
@@ -56,6 +59,45 @@ router.get("/getdocuments", async (req, res) => {
   }
 });
 router.post("/uploadfile", upload.single("myFile"), async (req, res, next) => {
+  try {
+    const DOCUMENTS = req.db.collection("documents");
+    const file = req.file;
+    if (!file) {
+      const error = new Error("Please upload a file");
+      error.statusCode = 400;
+      return res.status(400).json({
+        message: "File Not-allowed " + error,
+        suggest: "Only .pdf file supported ",
+        success: false
+      });
+    }
+
+    console.log(req.file.filename);
+    console.log(req.body);
+
+    await DOCUMENTS.insertOne({
+      filename: req.file.filename,
+      title: req.body.title,
+      description: req.body.description,
+      author: req.body.author,
+      visibility: req.body.visibility
+    });
+    res.status(200).json({
+      status: 200,
+      details: {
+        error: null,
+        success: true,
+        message: "File uploaded succesfully !!"
+      }
+    });
+  } catch (error) {
+    error.statusCode = 500; //INtrenal server error
+    error.message = "Internal Server error catched";
+    return next(error);
+  }
+});
+
+router.post("/uploadimage", upload.single("myFile"), async (req, res, next) => {
   try {
     const DOCUMENTS = req.db.collection("documents");
     const file = req.file;

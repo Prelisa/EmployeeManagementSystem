@@ -16,6 +16,10 @@ const usercrudRoute = require("./users/routes/crud.route");
 const deptcrudRoute = require("./department/department.route");
 const documentRoute = require("./documents/document.route");
 
+app.use('/',(req,res)=>{
+  res.sendFile('/test.html');
+})
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-type,Authorization");
   next();
