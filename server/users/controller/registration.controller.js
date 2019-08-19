@@ -22,20 +22,18 @@ async function registerUser(req, res, next) {
         
         //Check email Uniqueness
         const user = await USERS.findOne({ email: req.body.email });
-        if (user) return res.status(401).json({
-            status: 401,
-            message: {
-                error: "Email already taken!!",
-                success: false
-            }
-        });
+        if (user) {
+            error.statusCode=401;
+            return next(error);
+        }
 
 
         //bcrypt password before registration
         const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(req.body.password, salt);
 
-
+        req.body.deleted=false;
+        req.body.created_at=Date(Date.now());
 
         //Register Validated Users
 
@@ -57,7 +55,6 @@ async function registerUser(req, res, next) {
         });
     } catch (error) {
         error.statusCode = 500; //INtrenal server error
-        error.message = "Internal Server error catched";
         return next(error);
     }
 

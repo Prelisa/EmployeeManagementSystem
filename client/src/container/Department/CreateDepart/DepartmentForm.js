@@ -1,5 +1,6 @@
 import React from 'react';
-import Input from 'components/Input';
+import InputNormal from 'components/InputNormal';
+import Button from 'components/Button';
 
 const DepartmentForm = (props) => {
     const {name, handleChange, handleClick, namevalid} = props;
@@ -10,14 +11,15 @@ return (
             
             <div className="createDepartForm form-group">
                 <p className="namevalid">{namevalid}</p>
-                <Input  type="text" 
+                <InputNormal  type="text" 
                     name="department"
                     onChange={handleChange}
                     label="Department"
                 />
                 
+                 <Button className="button--size-big button--gradient-primary" buttonName="Add Department" handleClick={handleClick}/>  
             </div> 
-            <button type="submit" className="submitBtn" onClick={handleClick}>Create</button>   
+           
         </form>                
     </div>
     )

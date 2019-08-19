@@ -16,14 +16,11 @@ async function sendresetlinktoemail(req, res, next) {
     const USERS = req.db.collection("users");
     //check if user exist in our database
     const user = await USERS.findOne({ email: req.body.email });
-    if (!user)
-      return res.status(404).json({
-        status: 404,
-        message: {
-          error: "The email you have inserted is invalid one!!",
-          success: false
-        }
-      });
+    if (!user) {
+      error.statusCode = 404; //Not Found
+      return next(error);
+        };
+     
 
     //generate random token
     var token = crypto.randomBytes(24).toString("hex");

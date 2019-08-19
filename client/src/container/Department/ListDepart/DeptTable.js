@@ -2,32 +2,64 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Input from '../../../components/Input';
 import Button from 'components/Button';
-import ViewDepart from '../ViewDepart';
 
 class DeptTable extends React.Component {
     constructor(props) {
         super(props)
 
+        this.state={
+            currentPage: 1,
+            itemsPerPage:10,
+        }
     }
 
 
     renderTable = () => {
-        return this.props.datas.map(data=>{
+        if (this.props.datas){
+            const { currentPage, itemsPerPage}  = this.state;
+            const indexOfLastUser = currentPage * itemsPerPage;
+            const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+            const currentItems= this.props.datas.slice(indexOfFirstUser, indexOfLastUser);
+            
+       
+            return currentItems.map(data=>{
 
-            return(
-                <tr key={data._id}>
-                    <td className="name">{data.name}</td>
-                    <td>{data.depthead}</td>
-                    <td><Button 
-                            className="primary" 
-                            handleClick={(e)=> {this.handleClick(e, data)}}
-                            buttonName="View Details"/>
-                    </td>
-                </tr>
-                
-            )
-        })
+                return(
+                    <tr key={data._id}>
+                        <td className="name">{data.name}</td>
+                        <td>{data.depthead}</td>
+                        <td><Button 
+                                className="button--size-normal button--gradient-primary" 
+                                handleClick={(e)=> {this.handleClick(e, data)}}
+                                buttonName="View Details"/>
+                        </td>
+                    </tr>
+                    
+                )
+            })
+        }
         
+    }
+
+    renderPageNumbers = ()=>{
+        const pageNumbers = [];
+        if (this.props.datas){            
+            for (let i = 1; i <= Math.ceil(this.props.datas.length / this.state.itemsPerPage); i++) {
+            pageNumbers.push(i);
+            }
+        }
+       
+        pageNumbers.map(number => {
+            return (
+            <li
+                key={number}
+                id={number}
+                className={(this.state.currentPage === number ? 'page-active ' : '') + 'page-item'}
+                onClick={(e) => this.handlePageClick(e)}>                 
+                {number}              
+            </li>
+            );
+        });
     }
 
     handleClick(e,data){
@@ -39,12 +71,23 @@ class DeptTable extends React.Component {
       
     }
 
+    handlePageClick(event) {
+        this.setState({
+          currentPage: Number(event.target.id)
+        });
+    }
 
-    render() {
+
+    render() {        
+        console.log(this.props)
         return (
             <div className="dept-table">
                 <h3>Department List</h3>
-                <div className="search"><Input type="text" name="search" label="Search" /></div>
+                <div className="search">
+                    <Input type="text" name="search" placeholder="Search">
+                        <i className="icon-search"/>
+                    </Input>
+                </div>
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -57,6 +100,16 @@ class DeptTable extends React.Component {
                         {this.renderTable()}
                     </tbody>
                 </table>
+
+                <ul id="page-numbers" className="pagination">
+                    <li className="page-item">
+                        <i className="icon-triangle-left"></i>
+                    </li>
+                    {this.renderPageNumbers()}
+                    <li className="page-item">
+                        <i className="icon-triangle-right"></i>
+                    </li>
+                </ul>
 
             </div>
         )

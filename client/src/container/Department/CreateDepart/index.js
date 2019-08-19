@@ -1,5 +1,8 @@
 import React,{Component, Fragment} from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { createDept } from 'actions';
 
 import './style.scss';
 import DepartmentForm from './DepartmentForm';
@@ -9,7 +12,7 @@ class CreateDepart extends Component {
 
     state={
         name:'',
-        namevalid:'',
+        namevalid:'',        
     }
 
     handleChange = (event) => {
@@ -35,15 +38,17 @@ class CreateDepart extends Component {
                "name": this.state.name,
     
             };
-            request({
-                url: "http://localhost:4000/department",
-                method: "POST",
-                json: true,   // <--Very important!!!
-                body: myJSONObject
-            }, function (error, response, body){
-                alert(response.body);
-            });
 
+            this.props.createDept(myJSONObject);
+            // request({
+            //     url: "http://localhost:4000/department",
+            //     method: "POST",
+            //     json: true,   // <--Very important!!!
+            //     body: myJSONObject
+            // }, function (error, response, body){
+            //     alert(response.body);
+            // });
+       
             this.props.history.push('/admin/listdept');
         }
 
@@ -67,4 +72,11 @@ class CreateDepart extends Component {
     }
 }
 
-export default withRouter(CreateDepart);
+CreateDepart.propTypes={
+    createDept: PropTypes.func.isRequired,
+}
+
+const mapStateToProps= state => ({
+    response: state.createdata.response
+})
+export default connect(mapStateToProps, {createDept}) (withRouter(CreateDepart));

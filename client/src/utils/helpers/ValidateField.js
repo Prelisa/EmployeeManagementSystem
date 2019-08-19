@@ -4,7 +4,7 @@ const ValidateField = fields => {
     if (Object.keys(fields)[0] === 'email') {
         if (fields['email'] === '') {
             errors['isValidEmail'] = false;
-            errors['email'] = 'Email is Empty 123';
+            errors['email'] = 'Email is Empty';
             errors['isEmailEmpty'] = true;
         } else if (!re.test(fields['email'])) {
             errors['isValidEmail'] = false;

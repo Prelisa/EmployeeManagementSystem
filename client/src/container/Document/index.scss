@@ -6,7 +6,7 @@
     border-radius: 7px;
     width: 100%;
     padding: 25px 60px;
-   
+
     .inputfields {
         padding: 10px 0;
 
@@ -77,8 +77,9 @@
         color: white;
         padding: 0 10px;
     }
-    p{
-       color: map-get($map: $activecolors, $key: "primary");
+
+    p {
+        color: map-get($map: $activecolors, $key: "primary");
     }
 
 }
@@ -98,15 +99,21 @@
         color: map-get($map: $hovercolors, $key:"primary");
         padding: 20px 0;
     }
+
+    p {
+        color: #6C6F78;
+    }
 }
 
-.title,
+
 .description {
+
     display: flex;
     flex-flow: column;
-}
-.upload-form-body{
-    padding:20px 30px;
-}
 
 
+}
+
+.upload-form-body {
+    padding: 20px 30px;
+}

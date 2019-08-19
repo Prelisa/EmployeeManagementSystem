@@ -54,7 +54,7 @@ async function deleteDepartment(req, res, next) {
 
     try {
         const DEPARTMENT = req.db.collection('department');
-        let myquery = { _id: ObjectID(req.body._id) };
+        let myquery = { _id: ObjectID(req.params.id) };
         await DEPARTMENT.deleteOne(myquery, { upsert: true }, (error, obj) => {
             if (error) {
                 error.statusCode = 204;
@@ -83,7 +83,7 @@ async function updateDepartment(req, res, next) {
         const DEPARTMENT = req.db.collection('department');
 
 
-        let myquery = { _id: ObjectID(req.body._id) };
+        let myquery = { _id: ObjectID(req.params.id) };
         let newvalues = { $set: { name: req.body.name , depthead: req.body.depthead} };
         await DEPARTMENT.updateOne(myquery, newvalues, { upsert: true }, function(error, result) {
             if (error) throw error;

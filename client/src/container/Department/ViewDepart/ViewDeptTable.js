@@ -1,6 +1,9 @@
 import React from 'react';
 import request from 'request';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { deleteDept } from 'actions';
+import PropTypes from 'prop-types';
 import img from 'assets/img/dummy.jpeg';
 
 import Button from 'components/Button';
@@ -26,14 +29,11 @@ class ViewDeptTable extends React.Component{
             "_id" : this.props.data._id
         }
 
-        request({
-            url: "http://localhost:4000/deptdeletedata",
-            method: "POST",
-            json: true,   // <--Very important!!!
-            body: myJSONObject
-        }, function (error, response, body){
-         
-        })
+        this.props.deleteDept(myJSONObject);
+        setTimeout(() => {
+            console.log(this.props.response)
+        }, 500);
+        
         this.props.history.push('/admin/listdept');
         
         this.setState({
@@ -53,24 +53,16 @@ class ViewDeptTable extends React.Component{
                 <div className="title d-flex">
                     <h3>Details</h3>
                     <div className="buttons">
-                        <div><Button className="secondary1" buttonName="Delete" handleClick={(e)=> this.handleDelete(e)} /></div>
-                        <div><Button className="secondary2" buttonName="Edit" handleClick={this.props.handleEdit}/></div>
+                        <div><Button className="button--size-normal button--gradient-secondary1" buttonName="Delete" handleClick={(e)=> this.handleDelete(e)} /></div>
+                        <div><Button className="button--size-normal button--gradient-secondary2" buttonName="Edit" handleClick={this.props.handleEdit}/></div>
                     </div>
                 </div>
                 <div className="view-dept-table">
-                    <table className="table table-striped">
-                        <tbody>
-                            <tr>
-                                <td>Name</td>
-                                <td>{this.props.data.name}</td>
-                            </tr>
-                            
-                            <tr>
-                                <td>Department Head</td>
-                                <td>{this.props.data.depthead}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div className="view-dept--detail">
+                        <p className="detail-info">Name: {this.props.data.name}</p>
+                        <p className="detail-info">Department Head: {this.props.data.depthead}</p>
+                        
+                    </div>
                 </div>
     
                 <Modal 
@@ -84,5 +76,15 @@ class ViewDeptTable extends React.Component{
 
    
 }
+ViewDeptTable.propTypes = {
+    deleteDept: PropTypes.func.isRequired,
+    response: PropTypes.object.isRequired
+}
 
-export default withRouter(ViewDeptTable);
+const mapStateToProps= state => ({
+    response: state.getdata.res
+})
+
+
+export default connect(mapStateToProps, {deleteDept})(withRouter(ViewDeptTable));
+

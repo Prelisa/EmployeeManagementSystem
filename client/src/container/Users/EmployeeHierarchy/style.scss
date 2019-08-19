@@ -1,5 +1,10 @@
 @import "assets/styles/colors.scss";
 
+@mixin desktop{
+    @media screen and (max-width:1000px){
+        @content;
+    }
+}
 .ehs{
     margin: 1em;
     overflow: auto;
@@ -38,10 +43,11 @@
         display: flex;
         flex-flow: column nowrap;
         padding: 0 2em; 
-        margin-top: 2em;
+        margin-top: 2.5em;
 
         .cards{
             display: flex; 
+            flex-basis: 100%;
             flex-direction: row;
             flex-wrap: wrap;
             justify-content: flex-start;
@@ -57,8 +63,11 @@
     border: none;
     box-shadow: 0px 4px 2px 0px rgba(170,170,170,1);
     margin: 0.5em 1%;
+
+    @include desktop(){
+        flex-basis: 48%;
+    }
     .hr-image, .emp-image, .admin-image{
-        height: 60%;
         width: 60%;
         border-radius: 100%;  
         overflow: hidden;
@@ -97,7 +106,7 @@
         
         .name{
             text-align: center;
-            font-weight: medium;
+            font-weight: 500;
             font-size: 1em;
         }
 

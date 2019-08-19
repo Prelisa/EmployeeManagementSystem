@@ -14,16 +14,16 @@ const userRoute = require("./users/routes/registration.route");
 const resetPasswordroutes = require("./users/routes/resetpassword.route");
 const usercrudRoute = require("./users/routes/crud.route");
 const deptcrudRoute = require("./department/department.route");
-const documentRoute = require("./documents/document.route");
-
-app.use('/',(req,res)=>{
-  res.sendFile('/test.html');
-})
-
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Headers", "Content-type,Authorization");
-  next();
-});
+const documentRoute = require("./document-upload/routes/document-upload");
+const searchbarRoute = require("./searchbar");
+const ImageUpload = require("./image-upload/routes/image-upload");
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Headers", "Content-type,Authorization");
+//   next();
+// });
+// app.use('/home',(req,res)=>{
+//   res.sendFile('/home/prelisa/Videos/employee_mgmt_system/server/search.html');
+// })
 
 //Middleware to register database obj in req.db
 app.use((req, res, next) => {
@@ -43,6 +43,8 @@ app.use("/resetpassword", resetPasswordroutes);
 app.use(usercrudRoute);
 app.use(deptcrudRoute);
 app.use(documentRoute);
+app.use(searchbarRoute);
+app.use(ImageUpload);
 
 //Global error handling
 app.use(function(error, req, res, next) {

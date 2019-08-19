@@ -48,4 +48,38 @@
         color: $primary;
     }
 
+    .pagination{
+        box-shadow: none;
+        border: 1px solid #eeeeee;
+        width: fit-content;
+        width: -moz-fit-content;
+        position: static;
+
+        .page-item{
+            color: #aaaaaa;
+            width: 2em;
+            text-align: center;
+        }
+        .page-item:hover{
+            color: #fff;
+            background-color: $hover;
+        }
+        .page-item:active{
+            color: #fff;
+            background-color: $active;
+        }
+        .page-item:first-child, .page-item:last-child{
+            background-color: #eee;
+            color: #000000;
+            width: 2.5em;
+        }
+
+        .page-active{
+            background-color: $active;
+            color: #fff;
+            
+        }
+
+    }
+
 }

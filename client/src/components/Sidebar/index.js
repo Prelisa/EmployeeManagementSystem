@@ -56,106 +56,206 @@ export class SideBar extends React.Component {
     }
 
     render() {
+        const obj = decoder(localStorage.getItem('token_id'));
+        const role = obj.role.toLowerCase();
+        console.log(role);
         return (
             <div className="sidebar">
-                <div className="home-link d-flex justify-flex-start">
-                    <i className="icon icon-home" />
-                    <Link to="/admin">
-                        <div className="home">Home</div>
-                    </Link>
-                </div>
+                {(role === 'admin' || role === 'hr') && (
+                    <div>
+                        <div className="home-link d-flex justify-flex-start">
+                            <i className="icon icon-home" />
+                            <Link to={`/${role}`}>
+                                <div className="home">Home</div>
+                            </Link>
+                        </div>
 
-                <div>
-                    <div
-                        className="dropdown-link"
-                        data-toggle="collapse"
-                        onClick={e => this.toggleIcon(1)}
-                        data-target="#userOpen"
-                        role="button"
-                        aria-expanded="true"
-                        aria-controls="userOpen"
-                    >
-                        <i className="icon icon-user" />
-                        <p className="top-link department">Users</p>
-                        <i className={this.state.icon1} />
-                    </div>
-                    <div id="userOpen" className="dropdown-links collapse">
-                        <div className="outer-link">
-                            <Link to="/admin/createusers">
-                                <div className="link">Create Users</div>
-                            </Link>
+                        <div>
+                            <div
+                                className="dropdown-link"
+                                data-toggle="collapse"
+                                onClick={e => this.toggleIcon(1)}
+                                data-target="#userOpen"
+                                role="button"
+                                aria-expanded="true"
+                                aria-controls="userOpen"
+                            >
+                                <i className="icon icon-user" />
+                                <p className="top-link department">Users</p>
+                                <i className={this.state.icon1} />
+                            </div>
+                            <div
+                                id="userOpen"
+                                className="dropdown-links collapse"
+                            >
+                                <div className="outer-link">
+                                    <Link to={`/${role}/createusers`}>
+                                        <div className="link">Create Users</div>
+                                    </Link>
+                                </div>
+                                <div className="outer-link">
+                                    <Link to={`/${role}/listuser`}>
+                                        <div className="link">List Users</div>
+                                    </Link>
+                                </div>
+                                <div className="outer-link">
+                                    <Link to={`/${role}/ehs`}>
+                                        <div className="link">
+                                            Employee Hierachy
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
-                        <div className="outer-link">
-                            <Link to="/admin">
-                                <div className="link">List Users</div>
-                            </Link>
-                        </div>
-                        <div className="outer-link">
-                            <Link to="/admin/ehs">
-                                <div className="link">Employee Hierachy</div>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
 
-                <div>
-                    <div
-                        className="dropdown-link"
-                        data-toggle="collapse"
-                        onClick={e => this.toggleIcon(2)}
-                        data-target="#deptOpen"
-                        role="button"
-                        aria-expanded="true"
-                        aria-controls="deptOpen"
-                    >
-                        <i className="icon icon-menu-bar" />
-                        <p className="top-link department">Department</p>
-                        <i className={this.state.icon2} />
+                        <div>
+                            <div
+                                className="dropdown-link"
+                                data-toggle="collapse"
+                                onClick={e => this.toggleIcon(2)}
+                                data-target="#deptOpen"
+                                role="button"
+                                aria-expanded="true"
+                                aria-controls="deptOpen"
+                            >
+                                <i className="icon icon-menu-bar" />
+                                <p className="top-link department">
+                                    Department
+                                </p>
+                                <i className={this.state.icon2} />
+                            </div>
+                            <div
+                                id="deptOpen"
+                                className="dropdown-links collapse"
+                            >
+                                {role === 'admin' && (
+                                    <div className="outer-link">
+                                        <Link to={`/${role}/createdepart`}>
+                                            <div className="link">
+                                                Create Department
+                                            </div>
+                                        </Link>
+                                    </div>
+                                )}
+                                <div className="outer-link">
+                                    <Link to={`/${role}/listdept`}>
+                                        <div className="link">
+                                            List Department
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div
+                                className="dropdown-link"
+                                data-toggle="collapse"
+                                onClick={e => this.toggleIcon(3)}
+                                data-target="#docsOpen"
+                                role="button"
+                                aria-expanded="true"
+                                aria-controls="docsOpen"
+                            >
+                                <i className="icon icon-document" />
+                                <p className="top-link documents">Documents</p>
+                                <i className={this.state.icon3} />
+                            </div>
+                            <div
+                                id="docsOpen"
+                                className="dropdown-links collapse"
+                                aria-labelledby="headingOne"
+                            >
+                                <div className="outer-link">
+                                    <Link to={`/${role}/document`}>
+                                        <div className="link">
+                                            Create Documents
+                                        </div>
+                                    </Link>
+                                </div>
+                                <div className="outer-link">
+                                    <Link to={`/${role}/view-document`}>
+                                        <div className="link">
+                                            View Documents
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div id="deptOpen" className="dropdown-links collapse">
-                        <div className="outer-link">
-                            <Link to="/admin/createdepart">
-                                <div className="link">Create Department</div>
+                )}
+                {role === 'employee' && (
+                    <div>
+                        <div className="home-link d-flex justify-flex-start">
+                            <i className="icon icon-home" />
+                            <Link to={`/${role}`}>
+                                <div className="home">Home</div>
                             </Link>
                         </div>
-                        <div className="outer-link">
-                            <Link to="/admin/listdept">
-                                <div className="link">List Department</div>
-                            </Link>
+
+                        <div>
+                            <div
+                                className="dropdown-link"
+                                data-toggle="collapse"
+                                onClick={e => this.toggleIcon(1)}
+                                data-target="#userOpen"
+                                role="button"
+                                aria-expanded="true"
+                                aria-controls="userOpen"
+                            >
+                                <i className="icon icon-user" />
+                                <p className="top-link department">Users</p>
+                                <i className={this.state.icon1} />
+                            </div>
+                            <div
+                                id="userOpen"
+                                className="dropdown-links collapse"
+                            >
+                                <div className="outer-link">
+                                    <Link to={`/${role}`}>
+                                        <div className="link">List Users</div>
+                                    </Link>
+                                </div>
+                                <div className="outer-link">
+                                    <Link to={`/${role}/ehs`}>
+                                        <div className="link">
+                                            Employee Hierachy
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div
+                                className="dropdown-link"
+                                data-toggle="collapse"
+                                onClick={e => this.toggleIcon(3)}
+                                data-target="#docsOpen"
+                                role="button"
+                                aria-expanded="true"
+                                aria-controls="docsOpen"
+                            >
+                                <i className="icon icon-document" />
+                                <p className="top-link documents">Documents</p>
+                                <i className={this.state.icon3} />
+                            </div>
+                            <div
+                                id="docsOpen"
+                                className="dropdown-links collapse"
+                                aria-labelledby="headingOne"
+                            >
+                                <div className="outer-link">
+                                    <Link to={`/${role}/view-document`}>
+                                        <div className="link">
+                                            View Documents
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <div
-                        className="dropdown-link"
-                        data-toggle="collapse"
-                        onClick={e => this.toggleIcon(3)}
-                        data-target="#docsOpen"
-                        role="button"
-                        aria-expanded="true"
-                        aria-controls="docsOpen"
-                    >
-                        <i className="icon icon-document" />
-                        <p className="top-link documents">Documents</p>
-                        <i className={this.state.icon3} />
-                    </div>
-                    <div
-                        id="docsOpen"
-                        className="dropdown-links collapse"
-                        aria-labelledby="headingOne"
-                    >
-                        <div className="outer-link">
-                            <Link to="/admin/document">
-                                <div className="link">Create Documents</div>
-                            </Link>
-                        </div>
-                        <div className="outer-link">
-                            <Link to="/admin/view-document">
-                                <div className="link">View Documents</div>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
+                )}
             </div>
         );
     }

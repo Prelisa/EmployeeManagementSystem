@@ -1,62 +1,43 @@
 import React, { Component } from 'react';
-import request from 'request';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getdeptdata } from 'actions';
+import { withRouter } from 'react-router-dom';
 
 import DeptTable from './DeptTable';
 
 import './style.scss';
 
-class ListUsers extends Component {   
+class ListDepart extends Component {   
     constructor(props) {
-        super(props)
-    
+        super(props);
+
         this.state = {
-            _id:"",
-            name:"",
-            depthead:"",
-            dept:[]
-        }
+            _id: '',
+            name: '',
+            depthead: '',
+            dept: []
+        };
     }
         
     componentDidMount(){
-        var myJSONObject = {
-            "_id" : this.state._id,
-            "name" : this.state.name,
-            "depthead": this.state.depthead,                       
-        };
-
-        request({
-            url: "http://localhost:4000/deptgetdata",
-            method: "GET",
-            json: true,   // <--Very important!!!
-            body: myJSONObject
-        }, function (error, response, body){
-            
-            const datas=[];
-            response.body.data.map(data => {
-                const obj =[
-                    {
-                        _id: data._id,
-                        name : data.name,
-                        depthead: data.depthead
-                    }
-                ]
-                Array.prototype.push.apply(datas, obj)                   
-            }) 
-            this.setState({
-                dept:datas,
-            })
-
-         
-        }.bind(this));        
+        this.props.getdeptdata();    
     } 
     
     render() {
         
         return (
             
-            <DeptTable datas= {this.state.dept}/>
+            <DeptTable datas= {this.props.deptdatas}/>
         )
     }
 }
 
-export default ListUsers;
+ListDepart.propTypes={
+    getdeptdata: PropTypes.func.isRequired,
+}
+
+const mapStateToProps= state => ({
+    deptdatas: state.getdata.deptdatas
+})
+export default connect(mapStateToProps, {getdeptdata}) (withRouter(ListDepart));

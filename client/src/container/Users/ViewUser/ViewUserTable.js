@@ -1,115 +1,158 @@
 import React from 'react';
 import request from 'request';
 import { withRouter } from 'react-router-dom';
-import img from 'assets/img/dummy.jpeg';
-
+import { connect } from 'react-redux';
+import { deleteData } from 'actions';
+import PropTypes from 'prop-types';
+import img from 'assets/img/User Image - Edit.png';
+import decoder from 'jwt-decode';
+import UploadEmployeeDocument from './UploadEmployeeDocument';
+import ViewDocument from 'container/Document/ViewDocument/ViewDocument.jsx';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
-
-
-
-class ViewUserTable extends React.Component{
+import EditUser from 'container/Users/EditUser';
+class ViewUserTable extends React.Component {
     constructor(props) {
-        super(props)
-        
+        super(props);
         this.state = {
-            display: "display-none"
-        }
-    }   
-
-    handleDelete(){
-        this.setState({
-            display:"display-block"
-        })
+            image: '',
+            display: 'display-none',
+            loggedin: decoder(
+                localStorage.getItem('token_id')
+            ).role.toLowerCase()
+        };
     }
 
-    handleYes(){
-        var myJSONObject={
-            "_id" : this.props.data._id
-        }
-        request({
-            url: "http://localhost:4000/deletedata",
-            method: "POST",
-            json: true,   // <--Very important!!!
-            body: myJSONObject
-        }, function (error, response, body){
-            console.log(error, response,body);
-        })
-        this.props.history.push('/admin');
+    handleDelete() {
+        this.setState({
+            display: 'display-block'
+        });
+    }
+
+    handleYes() {
+        var myJSONObject = {
+            _id: this.props.data._id
+        };
+
+        this.props.deleteData(myJSONObject);
         
+        this.props.history.push(`/${this.state.loggedin}`);
+
         this.setState({
-            display:"display-none"
-        })
+            display: 'display-none'
+        });
     }
 
-    handleNo(){
+    handleNo() {
         this.setState({
-            display:"display-none"
-        })
-    }  
-    
-    render(){
+            display: 'display-none'
+        });
+    }
+    componentDidMount() {
+        request(
+            {
+                url: 'http://localhost:4000/images',
+                method: 'POST',
+                json: true, // <--Very important!!!
+                body: { email: this.props.data.email }
+            },
+            function(error, response, body) {
+                console.log(response);
+
+                if (body.data) {
+                    this.setState({
+                        image: body.data.image
+                    });
+                }
+            }.bind(this)
+        );
+    }
+    render() {
+        const image = <img src={this.state.image} alt="user" />;
+
         return (
             <div className="view-user">
                 <div className="title d-flex">
-                    <h3>{this.props.name} Details</h3>
-                    <div className="buttons d-flex justify-content-between">
-                        <div><Button className="secondary1" buttonName="Delete" handleClick={(e)=> this.handleDelete(e)} /></div>
-                        <div><Button className="secondary2" buttonName="Edit" handleClick={this.props.handleEdit}/></div>
+                    <h3>{this.props.data.name}</h3>
+                    <div className="d-flex">
+                        <Button
+                            className="button--size-normal button--gradient-primary"
+                            buttonName="Users' List"
+                        />
+                        <UploadEmployeeDocument email={this.props.data.email} />
                     </div>
                 </div>
-                <div className="view-user-table">
-                    <table className="table table-striped">
-                        <tbody>
-                            <tr>
-                                <td>Name</td>
-                                <td>{this.props.data.name}</td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td>{this.props.data.email}</td>
-                            </tr>
-                            <tr>
-                                <td>Department</td>
-                                <td>{this.props.data.department}</td>
-                            </tr>
-                            <tr>
-                                <td>Role</td>
-                                <td>{this.props.data.role}</td>
-                            </tr>
-                            <tr>
-                                <td>DOB</td>
-                                <td>{this.props.data.dob}</td>
-                            </tr>
-                            <tr>
-                                <td>Age</td>
-                                <td>{this.props.data.age}</td>
-                            </tr>
-                            <tr>
-                                <td>Contact</td>
-                                <td>{this.props.data.contact}</td>
-                            </tr>
-                            <tr>
-                                <td>Address</td>
-                                <td>{this.props.data.address}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div className="view-user-details">
+                    <div className="view-user--detail">
+                        <p className="detail-info">
+                            Name: {this.props.data.name}
+                        </p>
+                        <p className="detail-info">
+                            Department: {this.props.data.department}
+                        </p>
+                        <p className="detail-info">
+                            Role: {this.props.data.role}
+                        </p>
+                        <p className="detail-info">
+                            Address: {this.props.data.address}
+                        </p>
+                        <p className="detail-info">
+                            Phone no: {this.props.data.contact}
+                        </p>
+                        <p className="detail-info">
+                            Email: {this.props.data.email}
+                        </p>
+                        <p className="detail-info">
+                            Date of Birth: {this.props.data.dob}
+                        </p>
+                        <p className="detail-info">
+                            Age: {this.props.data.age}
+                        </p>
+                    </div>
 
-                    <img src={img} alt="no image uploaded"/>
+                    <div className="image-user">
+                        {image}
+                        <div className="buttons d-flex justify-content-between">
+                            <div className="buttons--button">
+                                <Button
+                                    className="button--size-normal button--gradient-secondary1"
+                                    buttonName="Delete"
+                                    handleClick={e => this.handleDelete(e)}
+                                />
+                            </div>
+                            <div className="buttons--button">
+                                <EditUser />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              
-    
-                <Modal 
-                    label="Are you sure you want to delete?" 
+
+                <Modal
+                    label="Are you sure you want to delete?"
                     className={this.state.display}
                     handleYes={this.handleYes.bind(this)}
-                    handleNo={this.handleNo.bind(this)}/>
-            </div>
-        )
-    }
+                    handleNo={this.handleNo.bind(this)}
+                />
 
-   
+                <div className="view-document">
+                    <ViewDocument
+                        individual={true}
+                        email={this.props.data.email}
+                    />
+                </div>
+            </div>
+        );
+    }
 }
 
-export default withRouter(ViewUserTable);
+ViewUserTable.propTypes = {
+    deleteData: PropTypes.func.isRequired,
+    response: PropTypes.object.isRequired
+}
+
+const mapStateToProps= state => ({
+    response: state.getdata.response
+})
+
+
+export default connect(mapStateToProps, {deleteData})(withRouter(ViewUserTable));

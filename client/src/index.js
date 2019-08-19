@@ -1,8 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import { AppRouter } from './app.route';
-import App from './AdminAPP';
+import { BrowserRouter as Router } from 'react-router-dom';
+import App from 'App';
+import { Provider } from 'react-redux';
+import store from './components/store';
 
-render(<AppRouter/>, document.getElementById('root'));
+render(
+    <Router>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </Router>,
+    document.getElementById('root')
+);

@@ -1,11 +1,8 @@
 import React from 'react';
-import Button from 'components/Button';
-import './index.scss';
-import Error from 'components/Error';
 import { withRouter } from 'react-router-dom';
-
+import DocumentUploadForm from 'components/DocumentUploadForm';
 const axios = require('axios');
-class Document extends React.Component {
+class UploadDocument extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,7 +18,8 @@ class Document extends React.Component {
             filename: ''
         };
     }
-    handleChange(e) {
+
+    handleChange = e => {
         const name = e.target.name;
         const value = e.target.value;
         this.setState({ [name]: value });
@@ -32,11 +30,13 @@ class Document extends React.Component {
         this.setState({
             errors: newState
         });
-    }
-    setPrivacy(e) {
+    };
+
+    setPrivacy = e => {
         console.log(e.target.value);
-    }
-    handleSubmit(e) {
+    };
+
+    handleSubmit = e => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('myFile', this.state.file);
@@ -44,6 +44,7 @@ class Document extends React.Component {
         formData.append('description', this.state.description);
         formData.append('visibility', true);
         formData.append('author', 'elonmusk@gmail.com');
+        formData.append('doc_type', 'organization');
 
         const config = {
             headers: {
@@ -53,128 +54,58 @@ class Document extends React.Component {
 
         if (this.state.title && this.state.description && this.state.file) {
             axios
-                .post('http://localhost:4000/uploadfile', formData, config)
+                .post('http://localhost:4000/document-upload', formData, config)
                 .then(response => {
-                    const value = true;
-                    this.props.history.push({
-                        pathname: `/admin/view-document/${value}`
-                    });
                     console.log(response);
-                })
-                .catch(error => {
-                    let errors = {};
-                    errors['form'] = 'Please enter file in pdf format only';
-                    errors['isFormInValid'] = true;
-                    this.setState({ errors: errors });
+
+                    // const value = true;
+                    // this.props.history.push({
+                    //     pathname: `/admin/view-document/${value}`
+                    // });
                 });
+            // .catch(error => {
+            //     console.log(error);
+
+            //     let errors = {};
+            //     errors['form'] = 'File should be in pdf format only';
+            //     errors['isFormInValid'] = true;
+            //     this.setState({ errors: errors });
+            // });
+        } else if (!this.state.file) {
+            let errors = {};
+            errors['form'] = 'Please Select a file';
+            errors['isFormInValid'] = true;
+            this.setState({ errors: errors });
+        } else if (this.state.title.length > 10) {
+            let errors = {};
+            errors['form'] =
+                'Title should be less than 10 characters in length';
+            errors['isFormInValid'] = true;
+            this.setState({ errors: errors });
         } else {
             let errors = {};
-            errors['form'] = 'Please Enter valid information';
+            errors['form'] = 'Fields cannot be Empty';
             errors['isFormInValid'] = true;
             this.setState({ errors: errors });
         }
-        console.log(this.state.errors);
-    }
-    handlefiles(e) {
+    };
+    handlefiles = e => {
         const filename = e.target.value;
         this.setState({ file: e.target.files[0], filename: filename });
-    }
+    };
     render() {
-        return (            
-            <div className="container">
-                <div className="header">
-                    <div className="heading">
-                        <h2>Upload Document</h2>
-                    </div>
-                    <div className="">
-                        <p>
-                        Click on select file to upload document. Enter
-                           title, description and whether you want to make
-                           document public or not before uploading .Please make
-                           sure you are uploading on .pdf formats as other
-                           format are not supported.
-                        </p>
-                    </div>
-                </div>
-                <div className="upload-form-body">
-                    <form
-                        className="demo-form"
-                        onSubmit={e => this.handleSubmit(e)}
-                    >
-                        <div className="inputfields">
-                            <input
-                                type="file"
-                                id="file"
-                                name="myFile"
-                                className="inputfile"
-                                onChange={e => this.handlefiles(e)}
-                            />
-                        </div>
-                        <div className="inputfields ">
-                            <p>Select Document</p>
-                            <div className="filename">
-                                <input
-                                    type="text"
-                                    value={this.state.filename}
-                                />
-                                <label htmlFor="file">
-                                    <i className="icon-document" />
-                                    Select a file
-                                </label>
-                            </div>
-                        </div>
-                        <div className="inputfields title">
-                            <p>Title:</p>
-                            <input
-                                type="text"
-                                name="title"
-                                value={this.state.title}
-                                onChange={e => this.handleChange(e)}
-                            />
-                        </div>
-                        <div className="inputfields description">
-                            <p> Description:</p>
-                            <textarea
-                                name="description"
-                                value={this.state.description}
-                                onChange={e => this.handleChange(e)}
-                            />
-                        </div>
-                        <div
-                            className="inputfields radio "
-                            onChange={e => {
-                                this.setPrivacy(e);
-                            }}
-                        >
-                            <p>Make Private:</p>
-                            <input
-                                type="radio"
-                                name="Privacy"
-                                value="yes"
-                                defaultChecked
-                            />
-                            Yes
-                            <input type="radio" name="Privacy" value="no" />
-                            No
-                        </div>
-                        {this.state.errors['form'] && (
-                            <Error
-                                className={'warning'}
-                                errorMessage={this.state.errors['form']}
-                            />
-                        )}
-                        <div className="inputfields">
-                            <Button className={'primary'}>
-                                <i className="icon-document" />
-                                Upload 
-                            </Button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        
+        return (
+            <DocumentUploadForm
+                handleSubmit={this.handleSubmit}
+                handlefiles={this.handlefiles}
+                filename={this.state.filename}
+                handleChange={this.handleChange}
+                setPrivacy={this.setPrivacy}
+                errors={this.state.errors}
+                privacyNeeded={true}
+            />
         );
     }
 }
 
-export default withRouter(Document);
+export default withRouter(UploadDocument);

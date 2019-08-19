@@ -1,13 +1,10 @@
 @mixin modalstyle {
-    margin: 1em;
-    width: 40%;
-    height: auto;
+    width: 125%;
+    height: 100vh;
     position: absolute;
-    left: 35%;
-    top: 30%;
-    background-color: #eeeeee;
-    border: 1px solid #000;
-
+    left: -20%;
+    top: -20%;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 @function dis($class){
@@ -26,6 +23,17 @@ $selectors:(display-block, display-none);
         @include modalstyle();
         display: dis($class);
     }
+}
+
+.modal-background{
+    position: absolute;
+    display: block;
+    left: 30%;
+    top: 40%;
+    width: 40%;
+    height: auto;
+    background-color: #fff;
+    border: 1px solid #000;
 }
 
 .label{

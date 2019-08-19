@@ -7,26 +7,22 @@ import './style.scss';
 
 export class ViewUser extends Component {
     constructor(props) {
-        super(props)    
-        
+        super(props);
     }
-    
-    handleEdit(e){
+
+    handleEdit(e) {
         e.preventDefault();
         this.props.history.push('/admin/editdept', this.props.location.state);
-       
-    } 
-    
-    render() { 
-        return (                    
-            
-            <ViewDeptTable 
-                data={this.props.data}
-                handleEdit={(e) => this.handleEdit(e)}
+    }
+
+    render() {
+        return (
+            <ViewDeptTable
+                // data={this.props.data}
+                handleEdit={e => this.handleEdit(e)}
                 data={this.props.location.state}
-            />      
-                        
-        )
+            />
+        );
     }
 }
 

@@ -2,37 +2,66 @@
 @import './base/mixin.scss';
 
 
-@function color($color-name, $type) {
-    @if $type=="normal" {
-        @return map-get($colors, $color-name);
+.button--size-big {
+    width: 160px;
+    height: 35px;
+    outline: none;
+    border: none;
+
+}
+
+.button--size-normal {
+    width: 120px;
+    height: 35px;
+}
+
+.button--size-small {
+    width: 100px;
+    height: 30px;
+}
+
+.button--gradient-primary {
+    @include button();
+    background-image: linear-gradient(#184D85, #0C2743);
+
+    &:hover {
+        background-image: linear-gradient(#123C69, #091E35);
+        color: white;
     }
 
-    @else if $type=="hover" {
-        @return map-get($hovercolors, $color-name);
-    }
-
-    @else if $type=="active" {
-        @return map-get($activecolors, $color-name);
+    &:active {
+        background-image: linear-gradient(#222D51, #070910);
     }
 }
 
-$selectors:(primary, secondary1, secondary2);
+.button--gradient-secondary1 {
+    @include button();
+    background-image: linear-gradient(#E53838, #731C1C);
 
-.buttonclass {
-    @each $class in $selectors {
-        .#{$class} {
-            @include button();
-            background: color($class, "normal")
-        }
+    &:hover {
+        color: white;
+        background-image: linear-gradient(#BC3333, #5E1A1A);
+    }
 
-        .#{$class}:hover {
-            @include button();
-            background: color($class, "hover")
-        }
+    &:active {
+        background-image: linear-gradient(#801f1f, #401010);
+    }
+}
 
-        .#{$class}:focus {
-            @include button();
-            background: color($class, "active")
-        }
+.button--gradient-secondary2 {
+    @include button();
+
+    background-image: linear-gradient(#269A90, #134D48);
+
+    &:hover {
+        @include button();
+        color: white;
+
+
+        background-image: linear-gradient(#269A90, #134D48);
+    }
+
+    &:active {
+        background-image: linear-gradient(#1A6d66, #0D3733);
     }
 }

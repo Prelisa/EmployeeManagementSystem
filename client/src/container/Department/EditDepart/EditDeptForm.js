@@ -39,7 +39,7 @@ const EditDeptForm = (props) => {
                     </div>                    
 
                     <div className="submit-button">
-                        <Button className="primary" buttonName="Edit" handleClick={(e)=> {props.handleClick(e)}}/>
+                        <Button className="button--size-normal button--gradient-primary" buttonName="Edit" handleClick={(e)=> {props.handleClick(e)}}/>
                     </div>         
                 </form>
         </div>

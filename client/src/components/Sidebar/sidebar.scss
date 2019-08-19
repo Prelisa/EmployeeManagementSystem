@@ -6,12 +6,12 @@
     height: 89vh;
     padding-left: 2em;
     background-image: linear-gradient($primary, #0C2743);
-
+        
     .home-link {
         padding: 1em 0.5em;
 
         .home {
-            margin-left: 2em;
+            margin-left: 20px;
             color: #fff;
             font-weight: bold;
         }
@@ -32,7 +32,8 @@
         justify-content: space-between;
         border: none;
         border-radius: 5px;
-        
+        cursor: pointer;
+
         .top-link {
             text-decoration: none;
             padding: 0 0.5em;
@@ -49,6 +50,7 @@
     .dropdown-link:active {
         background-color: $active;
     }
+
 
 
 

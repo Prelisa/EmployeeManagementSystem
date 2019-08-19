@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import request from 'request';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { updateDept } from 'actions';
 import EditDeptForm from './EditDeptForm';
 
 import './style.scss';
-
 
 export class EditDepart extends Component {
     constructor(props) {
@@ -74,16 +76,8 @@ export class EditDepart extends Component {
         if  ((state.namevalid ==="" || state.namevalid === "valid") &&
             (state.deptheadvalid =="" || state.deptheadvalid ==="valid")){
             
-            request({
-                url: "http://localhost:4000/deptupdatedata",
-                method: "POST",
-                json: true,   // <--Very important!!!
-                body: myJSONObject
-            }, function (error, response, body){
-              
-                alert(body.detail.message);
-            });
-    
+            this.props.updateDept(myJSONObject);
+                
             this.props.history.push('/admin/listdept');
         }
 
@@ -95,11 +89,17 @@ export class EditDepart extends Component {
     
     render() {
         return (
-
             <EditDeptForm onChange={this.onChange.bind(this)} data = {this.state} handleClick={this.handleClick.bind(this)}/>
-            
         )
     }
 }
 
-export default withRouter(EditDepart)
+EditDepart.propTypes={
+    updateDept: PropTypes.func.isRequired,
+}
+
+const mapStateToProps= state => ({
+    response: state.createdata.response
+})
+
+export default connect(mapStateToProps, { updateDept })(withRouter(EditDepart))

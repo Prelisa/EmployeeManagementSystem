@@ -40,7 +40,7 @@ async function loginUser(req, res, next) {
       });
 
     const token = jwt.sign(
-      { id: loginuser._id, email: loginuser.email },
+      { id: loginuser._id, email: loginuser.email, name: loginuser.name, role: loginuser.role },
       process.env.SECRET_KEY
     );
 

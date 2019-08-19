@@ -42,8 +42,7 @@ class Dropdown extends React.Component {
     }
 
     showData(){        
-        return this.props.datas.map( data => {
-            
+        return this.props.datas.map( data => {            
             return(
                 <li key={data._id} onClick={(e)=> {this.clickItem(e,data.name)}}>
                     <div className="round"></div>{data.name}                    

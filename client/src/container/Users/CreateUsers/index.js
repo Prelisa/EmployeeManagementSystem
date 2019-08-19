@@ -1,80 +1,62 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import CreateUserForm from './CreateUserForm';
-import request from 'request';
-
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { createUser, sendMail, getdeptdata} from 'actions';
+import decoder from 'jwt-decode';
 import './style.scss';
 
 export class CreateUsers extends React.Component {
     constructor(props) {
-        super(props)
-    
+        super(props);
+
         this.state = {
-            username:'',
-            department:'',
-            role:'',
-            email:'',
-            emailvalid : '',
-            namevalid : '',
-            datas:[],
-            _id:"",
-            deptname:"",
-            depthead:"",
-        }
+            username: '',
+            department: '',
+            role: '',
+            email: '',
+            emailvalid: '',
+            namevalid: '',
+            datas: [],
+            _id: '',
+            deptname: '',
+            depthead: '',
+            loggedin: decoder(
+                localStorage.getItem('token_id')
+            ).role.toLowerCase()
+        };
     }
 
     componentDidMount(){
-        var myJSONObject = {
-            "_id" : this.state._id,
-            "name" : this.state.deptname,
-            "depthead": this.state.depthead,                       
-        };
-
-        request({
-            url: "http://localhost:4000/deptgetdata",
-            method: "GET",
-            json: true,   // <--Very important!!!
-            body: myJSONObject
-        }, function (error, response, body){
-            
-            const datas=[];
-            response.body.data.map(data => {
-                const obj =[
-                    {
-                        _id: data._id,
-                        name : data.name,
-                        depthead: data.depthead
-                    }
-                ]
-                Array.prototype.push.apply(datas, obj)                   
-            }) 
-            this.setState({
-                datas:datas,
-            })
-            
-        }.bind(this));        
+        this.props.getdeptdata();
     }
 
-    handleChange(e){
+    handleChange(e) {
         const name = e.target.name;
         const value = e.target.value;
-        
-        this.setState({
-            [name]: value,
-        })
 
-        this.validateInput(name,value);
+        this.setState({
+            [name]: value
+        });
+
+        this.validateInput(name, value);
     }
 
-    validateInput = (name,value) => {        
-        if (name == 'username'){
-            if ((/^[A-Z][a-z]+(([',. -][A-Z][a-z])?[a-zA-Z]*)*$/).test(value)){
-                this.setState({namevalid: 'valid'})
+    validateInput = (name, value) => {
+        if (name == 'username') {
+            if (/^[A-Z][a-z]+(([',. -][A-Z][a-z])?[a-zA-Z]*)*$/.test(value)) {
+                this.setState({ namevalid: 'valid' });
+            } else {
+                this.setState({ namevalid: 'invalid' });
             }
-            else{
-                this.setState({namevalid: 'invalid'})
+        } else if (name == 'email') {
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+                this.setState({ emailvalid: 'valid' });
+            } else {
+                this.setState({ emailvalid: 'invalid' });
             }
         }
-
+    
         else if (name == 'email'){
             if ((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(value)){
                 this.setState({emailvalid: 'valid'})
@@ -85,76 +67,46 @@ export class CreateUsers extends React.Component {
         }               
     }
 
-    sendEmail(){
-        const obj = {
-            email: this.state.email
-        };
-        request(
-            {
-                url: 'http://localhost:4000/resetpassword/sendlinktoemail',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'sgdjajdajdjasdjas'
-                },
-                method: 'POST',
-                json: true,
-                body: obj
-            },
-            (error, response) => {
-                let errors = {};
-                console.log(response);
-                if (response.body.message.success) {
-                    this.setState({ isSentSuccess: true });
-                } else {
-                    console.log(response);
-                    errors['email'] = `${response.body.message.error}`;
-                    this.setState({ errors });
-                }
-            }
-        );
-    }
-
     generatePassword(){        
         var length = 8,
-            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-            retVal = "";
+            charset =
+                'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+            retVal = '';
         for (var i = 0, n = charset.length; i < length; ++i) {
             retVal += charset.charAt(Math.floor(Math.random() * n));
         }
-     
+
         return retVal;
-               
     }
 
-    buttonClick(e){
-        e.preventDefault();        
+    buttonClick(e) {
+        e.preventDefault();
 
         const password = this.generatePassword();
-        
-        if (this.state.email != "" && this.state.username != "" && this.state.emailvalid==="valid" && this.state.namevalid==="valid"){
+
+        if (
+            this.state.email != '' &&
+            this.state.username != '' &&
+            this.state.emailvalid === 'valid' &&
+            this.state.namevalid === 'valid'
+        ) {
             var myJSONObject = {
-                "name": this.state.username,
-                "email": this.state.email,
-                "password": password,
-                "role": this.state.role,
-                "department" :this.state.department,
+                name: this.state.username,
+                email: this.state.email,
+                password: password,
+                role: this.state.role,
+                department: this.state.department
             };
 
-            request({
-                url: "http://localhost:4000/register",
-                method: "POST",
-                json: true,   // <--Very important!!!
-                body: myJSONObject
-            }, function (error, response, body){
-                console.log(response, error, body);
-                alert(response.statusMessage);
-                
-            }); 
-
+            this.props.createUser(myJSONObject); //redux for calling api to add data
+            const obj = {
+                email: this.state.email
+            };
+    
+            this.props.sendMail(obj);
             setTimeout(() => {
-                this.sendEmail();
-              }, 5000);
-            
+                
+              }, 5000);           
            
         }
         
@@ -166,34 +118,40 @@ export class CreateUsers extends React.Component {
         { 
             console.log("name invalid")
         }
-        else{
-            alert("empty");
-        }
-        
-        
     }
 
-    selectValue(name, title){
+    selectValue(name, title) {
         this.setState({
-            [title] : name
-        })
+            [title]: name
+        });
     }
 
     render() {
-        
-        return (
-           
+        return (           
            <CreateUserForm 
                 handleChange={(e) => this.handleChange(e)} 
                 emailvalid={this.state.emailvalid} 
                 namevalid={this.state.namevalid}
                 onClick={(e) => this.buttonClick(e)}
-                dropdown={this.state.datas}
-                selectValue={this.selectValue.bind(this)}/>
-                           
-                
-        )
+                dropdown={this.props.deptdatas}
+                selectValue={this.selectValue.bind(this)}
+                loggedin={this.state.loggedin}
+            />
+        );
     }
 }
 
-export default CreateUsers;
+CreateUserForm.propTypes= {
+    createUser : PropTypes.func.isRequired,
+    sendMail: PropTypes.func,
+    getdeptdata: PropTypes.func.isRequired,
+}
+
+const mapStateToProps= state => ({
+    deptdatas: state.getdata.deptdatas,
+    data: state.createdata.data,
+    responsea: state.getdata.response,
+    responseb: state.createdata.response
+})
+
+export default connect(mapStateToProps, { createUser, sendMail, getdeptdata})(CreateUsers);

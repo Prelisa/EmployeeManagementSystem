@@ -2,8 +2,9 @@
 
 .create-users{
     width: 90%;
-    padding: 1.25em;
-    height: 85vh;
+    padding:1.25em;
+    display: flex;
+    flex-direction: column;
     justify-content: flex-start;
 
     h3{
@@ -12,8 +13,7 @@
         padding-left: 1em;
     }
 }
-.create-user-form{
-    height: 90%;
+.create-user-form{   
     .user-form{
         height: 100%;
         display: flex;
@@ -28,7 +28,8 @@
 
         .validity{
             position: absolute;
-            right: 0;
+            right: 1%;
+            top: 20%;
         }
     }
 

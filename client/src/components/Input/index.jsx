@@ -11,6 +11,7 @@ const Input = props => {
                     name={props.name}
                     onChange={props.onChange}
                     value={props.value}
+                    placeholder={props.placeholder}
                     required
                 />
                 <label htmlFor={props.label}>{props.label}</label>
